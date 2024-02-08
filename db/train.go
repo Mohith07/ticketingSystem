@@ -63,6 +63,10 @@ func getTrainDetails(id string) map[string]*Seat {
 }
 
 func SaveTrain(train *Train, location Location) bool {
+
+	if _, ok := Trains[location]; ok {
+		return false
+	}
 	var sections []*Section
 	// create 2 sections
 
