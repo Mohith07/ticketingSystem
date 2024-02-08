@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package router;
+
+option go_package = ".";
+
+service RouteGuide {
+  rpc BuyTicket(TicketRequest) returns (TicketResponse);
+  rpc ShowTicket(TicketId) returns (Ticket);
+  rpc ShowSectionDetails(SectionRequest) returns (SectionResponse);
+  rpc RemoveUser(UserRequest) returns (BooleanObj);
+  rpc ModifySeat(UserRequest) returns (Seat);
+  rpc ShowUsersBoarded(TrainId) returns (SectionResponse);
+}
+
+
+
+message TrainId {
+  string trainId = 1;
+}
+
+message UserRequest {
+  string email = 1;
+}
+
+message BooleanObj {
+  bool response = 1;
+}
+
+message SectionRequest {
+  string name = 1;
+}
+
+message SectionResponse {
+  string name = 1;
+  map<string, string> userToSeatMap = 2;
+}
+
+message TicketId {
+  string ticketId = 1;
+}
+
+message TicketResponse {
+  string ticketId = 1;
+  string seatNumber = 2;
+  string sectionNumber = 3;
+}
+
+message TicketRequest {
+  User user = 1;
+  Location from = 2;
+  Location to = 3;
+  int32 pricePaid = 4;
+}
+
+message Ticket {
+  string trainNumber = 1;
+  Seat seat = 2;
+  User user = 3;
+}
+
+message Section {
+  string name = 1;
+  repeated Seat seats = 2;
+}
+
+message Seat {
+  string section = 1;
+  string seatNumber = 2;
+}
+
+
+message Location {
+  int32 locationCode = 1;
+  string name = 2;
+}
+
+
+message User {
+  string firstName = 1;
+  string lastName = 2;
+  string email = 3;
+}
