@@ -7,11 +7,11 @@ Have added the logic for creating trains in db.Init, please refer there
 Please refer client folder for testing out grpc endpoints - some basic API calls have been made in main()
 
 
-##Follow below steps to execute the code
+### Follow below steps to execute the code
 
 #### start server
 go run server/server.go
 
-####Now execute this in another terminal
+#### Now execute this in another terminal
 go run client/client.go
 
