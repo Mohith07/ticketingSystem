@@ -12,50 +12,49 @@ import (
 const PORT = "50051"
 
 func main() {
-
 	conn, err := grpc.Dial("localhost:"+PORT, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("grpc.Dial err: %v", err)
 	}
 	defer conn.Close()
-
 	_, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Duration(5*time.Second)))
 	defer cancel()
-
 	client := pb.NewRouteGuideClient(conn)
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	log.Println("Connected successfully to the server..")
 
+	//TEST CODE
+	executeClientTestCode(client, ctx)
+}
+
+func executeClientTestCode(client pb.RouteGuideClient, ctx context.Context) {
+	//USER 1
 	request := GetTicketDetails("mohith@cloudbees.com", "random", "random2")
-
 	resp, _ := client.BuyTicket(ctx, &request)
-
 	log.Println("response is {}", resp)
 
+	//USER 2
 	request2 := GetTicketDetails("bro@cloudbees.com", "random-new", "random-new2")
-
 	resp2, _ := client.BuyTicket(ctx, &request2)
-
 	log.Println("response 2 is {}", resp2)
 
+	//GET TICKET ID
 	ticketId := pb.TicketId{TicketId: resp2.TicketId}
-
 	resp3, _ := client.ShowTicket(ctx, &ticketId)
-
 	log.Println("response 3 is {}", resp3)
 
+	//REMOVE USER
 	req3 := pb.UserRequest{Email: "mohith@cloudbees.com"}
-
 	resp4, _ := client.RemoveUser(ctx, &req3)
-
 	log.Println("response 4 is {}", resp4)
 
+	//SHOW BOARDED USERS
 	req4 := pb.TrainId{TrainId: resp3.TrainNumber}
-
 	resp5, _ := client.ShowUsersBoarded(ctx, &req4)
-
 	log.Println("response 4 is {}", resp5)
+
+	//TODO add more operation
 }
 
 func GetTicketDetails(email string, firstName string, lastName string) pb.TicketRequest {
